@@ -50,7 +50,7 @@ jobs:
         run: |
           sudo apt update
           sudo apt search luajit
-          sudo apt install -y --no-install-recommends libc6-dev libfindbin-libs-perl make gcc-aarch64-linux-gnu libc6-dev-arm64-cross luajit luajit-dev
+          sudo apt install -y --no-install-recommends libc6-dev libfindbin-libs-perl make gcc-aarch64-linux-gnu libc6-dev-arm64-cross luajit libluajit5.1-2 libluajit-5.1-dev
         if: startsWith(matrix.os, 'ubuntu')
 
       - name: Build Niji ${{ matrix.target }}
