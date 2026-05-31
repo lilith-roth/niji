@@ -29,11 +29,7 @@ jobs:
         include:
           - target: aarch64-unknown-linux-gnu
             os: ubuntu-22.04
-          - target: aarch64-apple-darwin
-            os: macos-15
           - target: x86_64-unknown-linux-gnu
-            os: ubuntu-22.04
-          - target: x86_64-pc-windows-gnu
             os: ubuntu-22.04
     timeout-minutes: 60
     steps:
@@ -45,7 +41,7 @@ jobs:
 
       - name: Install rust target
         run: |
-          cargo install cargo-generate-rpm cargo-deb just
+          cargo install cargo-generate-rpm just
           rustup target add ${{ matrix.target }}
 
       - uses: taiki-e/setup-cross-toolchain-action@v1
@@ -56,7 +52,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt update
-          sudo apt install -y --no-install-recommends libc6-dev  libfindbin-libs-perl make gcc-aarch64-linux-gnu libc6-dev-arm64-cross
+          sudo apt install -y --no-install-recommends libc6-dev  libfindbin-libs-perl make gcc-aarch64-linux-gnu libc6-dev-arm64-cross luajit libluajit
         if: startsWith(matrix.os, 'ubuntu')
 
       - uses: taiki-e/install-action@v2
@@ -69,16 +65,19 @@ jobs:
           bin: yrba
           target: ${{ matrix.target }}
           tar: all
-          zip: windows
           features: vendored-openssl
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build RPM package
         run: just build-rpm-target ${{ matrix.target }}
-        if: ${{ matrix.target == 'aarch64-unknown-linux-gnu' || matrix.target == 'x86_64-unknown-linux-gnu' }}
+        if:
+          ${{ matrix.target == 'aarch64-unknown-linux-gnu' || matrix.target ==
+          'x86_64-unknown-linux-gnu' }}
 
       - name: Upload RPM package
         uses: softprops/action-gh-release@v3
-        if: ${{ matrix.target == 'aarch64-unknown-linux-gnu' || matrix.target == 'x86_64-unknown-linux-gnu' }}
+        if:
+          ${{ matrix.target == 'aarch64-unknown-linux-gnu' || matrix.target ==
+          'x86_64-unknown-linux-gnu' }}
         with:
           files: target/${{ matrix.target }}/generate-rpm/*.rpm
