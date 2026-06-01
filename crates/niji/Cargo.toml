@@ -6,6 +6,11 @@ edition = "2024"
 [lints.clippy]
 pedantic = "warn"
 
+[package.metadata.generate-rpm]
+assets = [
+    { source = "target/release/niji", dest = "/bin/niji", mode = "755" },
+]
+
 [dependencies]
 niji_console = { path = "../niji_console" }
 niji_macros = { path = "../niji_macros" }
