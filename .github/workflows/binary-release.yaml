@@ -62,7 +62,7 @@ jobs:
 
       - uses: taiki-e/upload-rust-binary-action@v1
         with:
-          bin: yrba
+          bin: niji
           target: ${{ matrix.target }}
           tar: all
           features: vendored-openssl
