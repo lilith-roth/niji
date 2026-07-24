@@ -55,8 +55,7 @@ lint-nix:
 	statix check .
 
 build-rpm:
-    cargo generate-rpm
+    cargo generate-rpm -p crates/niji
 
 build-rpm-target target:
-    cargo generate-rpm --target {{ target }}
-
+    cargo generate-rpm -p crates/niji --target {{ target }}

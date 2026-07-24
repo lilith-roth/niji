@@ -1,7 +1,9 @@
 [package]
 name = "niji"
+description = "A customizable tool for theming linux systems"
 version = "0.6.0"
 edition = "2024"
+license = "GPL-3.0-only"
 
 [lints.clippy]
 pedantic = "warn"
