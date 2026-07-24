@@ -1,0 +1,35 @@
+name: "Nix"
+
+permissions:
+  contents: "write"
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  build:
+    runs-on: "ubuntu-latest"
+
+    steps:
+      - name: "GitHub: Checkout Repository"
+        uses: "actions/checkout@0c366fd6a839edf440554fa01a7085ccba70ac98" #v6.0.1
+
+      - name: "GitHub: Setup Nix"
+        uses: "custom-workflows/setup-nix@d3dc49dd7bd37d10de81c938bebefad918e4d499"
+        with:
+          nix_path: nixpkgs=channel:nixos-unstable
+
+      - name: "Nix: Check Formatting"
+        run: |
+          nix run nixpkgs#just check-format-nix
+
+      - name: "Nix: Check Lint"
+        run: |
+          nix-shell -p statix --command "nix run nixpkgs#just lint-nix"
+
+      - name: "Nix: Build"
+        run: |
+          nix run nixpkgs#just build-nix
